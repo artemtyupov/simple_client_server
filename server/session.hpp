@@ -10,10 +10,10 @@ class CSession final
 public:
     CSession(boost::shared_ptr<boost::asio::io_service> ios) noexcept;
 
-    void start() noexcept;
-    void stop() noexcept;
+    void Start() noexcept;
+    void Stop() noexcept;
 
-    boost::asio::ip::tcp::socket &get_socket() noexcept;
+    boost::asio::ip::tcp::socket& GetSocket() noexcept;
 
 private:
     boost::shared_ptr<boost::asio::io_service> m_io_service;

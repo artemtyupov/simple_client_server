@@ -12,17 +12,17 @@ CSession::CSession(boost::shared_ptr<boost::asio::io_service> ios) noexcept
 {
 }
 
-boost::asio::ip::tcp::socket &CSession::get_socket() noexcept
+boost::asio::ip::tcp::socket &CSession::GetSocket() noexcept
 {
     return m_socket;
 }
 
-void CSession::start() noexcept
+void CSession::Start() noexcept
 {
     try
     {
-        m_packet.process(m_socket);
-        stop();
+        m_packet.GetDataFromSocket(m_socket);
+        Stop();
     }
     catch (const std::exception &e)
     {
@@ -32,7 +32,7 @@ void CSession::start() noexcept
     }
 }
 
-void CSession::stop() noexcept
+void CSession::Stop() noexcept
 {
     m_socket.shutdown(boost::asio::socket_base::shutdown_both);
     m_socket.close();

@@ -4,6 +4,6 @@
 int main()
 {
     CServer server{SERVER_IP, SERVER_PORT, SERVER_THREADS};
-    server.start();
+    server.Start();
     return EXIT_SUCCESS;
 }

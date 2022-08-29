@@ -10,19 +10,11 @@ CClient::CClient(const std::string ip, const unsigned short port) noexcept
 
 CClient::~CClient() noexcept
 {
-    disconnect();
+    DisconnectFromSocket();
     LOG_INF() << "Client exited successfully!" << std::endl;
 }
 
-void CClient::start() noexcept
-{
-    if (connect())
-    {
-        m_packet.process(m_socket);
-    }
-}
-
-bool CClient::connect() noexcept
+bool CClient::ConnectViaSocket() noexcept
 {
     bool is_connected = true;
 
@@ -56,7 +48,7 @@ bool CClient::connect() noexcept
     return is_connected;
 }
 
-void CClient::disconnect() noexcept
+void CClient::DisconnectFromSocket() noexcept
 {
     if (m_socket.is_open())
     {

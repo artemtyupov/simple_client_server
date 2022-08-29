@@ -3,5 +3,13 @@
 #include <string>
 #include <boost/asio.hpp>
 
-std::string get_peer_ip(const boost::asio::ip::tcp::socket &socket) noexcept;
-unsigned short get_peer_port(const boost::asio::ip::tcp::socket &socket) noexcept;
+///Client packet types
+enum ePacketType
+{
+    ePacketType_int,
+    ePacketType_double,
+    ePacketType_string
+};
+
+std::string GetPeerIP(const boost::asio::ip::tcp::socket &socket) noexcept;
+unsigned short GetPeerPort(const boost::asio::ip::tcp::socket &socket) noexcept;

@@ -16,13 +16,13 @@ public:
            const unsigned int num_threads) noexcept;
     ~CServer() noexcept;
 
-    void start() noexcept;
-    void stop() noexcept;
+    void Start() noexcept;
+    void Stop() noexcept;
 
 private:
-    void worker_thread_callback(boost::shared_ptr<boost::asio::io_service> ios) noexcept;
-    void accept_handler(boost::shared_ptr<CSession> this_session, const boost::system::error_code &ec) noexcept;
-    void accept_new_connection() noexcept;
+    void WorkerThreadCallback(boost::shared_ptr<boost::asio::io_service> ios) noexcept;
+    void AcceptHandler(boost::shared_ptr<CSession> this_session, const boost::system::error_code &ec) noexcept;
+    void AcceptNewConnection() noexcept;
 
     boost::shared_ptr<boost::asio::io_service> m_ios_acceptors;
     boost::shared_ptr<boost::asio::io_service::work> m_ios_work_acceptors;

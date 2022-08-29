@@ -4,6 +4,16 @@
 int main()
 {
     CClient client{SERVER_IP, SERVER_PORT};
-    client.start();
+    if (!client.ConnectViaSocket())
+        return EXIT_FAILURE;
+
+    int a = 123;
+    client.TransferDataToServer<int>(a);
+
+    double b = 123.123;
+    client.TransferDataToServer<double>(b);
+
+    client.DisconnectFromSocket();
+
     return EXIT_SUCCESS;
 }

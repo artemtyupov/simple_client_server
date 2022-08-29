@@ -20,18 +20,18 @@ CServer::CServer(const std::string ip, const unsigned short port,
       m_signals{*m_ios_acceptors, SIGINT, SIGTERM}
 {
     // Add signal handling for graceful termination (CTRL + C)
-    m_signals.async_wait(boost::bind(&CServer::stop, this));
+    m_signals.async_wait(boost::bind(&CServer::Stop, this));
 
     LOG_INF() << "Initiating server..." << std::endl;
     for (unsigned int i = 0; i < num_threads; ++i)
     {
-        m_executors_thread_group.create_thread(boost::bind(&CServer::worker_thread_callback,
+        m_executors_thread_group.create_thread(boost::bind(&CServer::WorkerThreadCallback,
                                                            this,
                                                            m_ios_executors));
     }
-
-    m_acceptor.async_accept(m_session->get_socket(),
-                            boost::bind(&CServer::accept_handler, this, m_session, boost::asio::placeholders::error));
+    
+    m_acceptor.async_accept(m_session->GetSocket(),
+                            boost::bind(&CServer::AcceptHandler, this, m_session, boost::asio::placeholders::error));
 
     lock_stream();
     LOG_INF() << "Server started! [" << m_endpoint << "]" << std::endl;
@@ -40,19 +40,19 @@ CServer::CServer(const std::string ip, const unsigned short port,
 
 CServer::~CServer() noexcept
 {
-    stop();
+    Stop();
 
     lock_stream();
     LOG_INF() << "Server closed successfully! Bye bye! :)" << std::endl;
     unlock_stream();
 }
 
-void CServer::start() noexcept
+void CServer::Start() noexcept
 {
     m_ios_acceptors->run();
 }
 
-void CServer::stop() noexcept
+void CServer::Stop() noexcept
 {
     if (!m_ios_acceptors->stopped())
     {
@@ -67,7 +67,7 @@ void CServer::stop() noexcept
 
 // Utility methods
 
-void CServer::worker_thread_callback(boost::shared_ptr<boost::asio::io_service> ios) noexcept
+void CServer::WorkerThreadCallback(boost::shared_ptr<boost::asio::io_service> ios) noexcept
 {
     while (true)
     {
@@ -91,18 +91,18 @@ void CServer::worker_thread_callback(boost::shared_ptr<boost::asio::io_service> 
     }
 }
 
-void CServer::accept_handler(boost::shared_ptr<CSession> this_session, const boost::system::error_code &ec) noexcept
+void CServer::AcceptHandler(boost::shared_ptr<CSession> this_session, const boost::system::error_code &ec) noexcept
 {
     if (!ec)
     {
         LOG_INF() << "Connection established with client! ["
-                  << get_peer_ip(this_session->get_socket()) << ":"
-                  << get_peer_port(this_session->get_socket()) << "]" << std::endl;
+                  << GetPeerIP(this_session->GetSocket()) << ":"
+                  << GetPeerPort(this_session->GetSocket()) << "]" << std::endl;
 
-        m_ios_executors->post(boost::bind(&CSession::start, this_session));
+        m_ios_executors->post(boost::bind(&CSession::Start, this_session));
 
         m_session = boost::make_shared<CSession>(m_ios_executors);
-        m_acceptor.async_accept(m_session->get_socket(),
-                                boost::bind(&CServer::accept_handler, this, m_session, boost::asio::placeholders::error));
+        m_acceptor.async_accept(m_session->GetSocket(),
+                                boost::bind(&CServer::AcceptHandler, this, m_session, boost::asio::placeholders::error));
     }
 }
