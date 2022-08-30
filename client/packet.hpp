@@ -52,6 +52,7 @@ private:
             SetPacketType(ePacketType::ePacketType_int);
             SetPacketSize(sizeof(int));
             ec = TransferPacketHeader(socket);
+            
         }
         else if (std::is_same<T, double>::value)
         {
@@ -59,11 +60,10 @@ private:
             SetPacketSize(sizeof(double));
             ec = TransferPacketHeader(socket);
         }
-        
+
         // Send packet
-        if (ec)
-            write(socket, boost::asio::buffer(&data, GetPacketSize()), boost::asio::transfer_exactly(GetPacketSize()), ec);
-            
+        write(socket, boost::asio::buffer(&data, GetPacketSize()), boost::asio::transfer_exactly(GetPacketSize()), ec);
+
         return ec;
     }
 

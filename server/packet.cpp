@@ -37,7 +37,7 @@ boost::system::error_code CPacket::GetDataFromSocket(boost::asio::ip::tcp::socke
         read(socket, read_buffer, boost::asio::transfer_exactly(bytes_to_read), ec);
         if (ec)
         {
-            LOG_ERR() << "Message read error! " << ec.message() << std::endl;
+            LOG_ERR() << "Packet read error! " << ec.message() << std::endl;
             return ec;
         }
 

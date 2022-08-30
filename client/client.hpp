@@ -11,16 +11,19 @@ public:
     CClient(const std::string ip, const unsigned short port) noexcept;
     ~CClient() noexcept;
 
-    bool ConnectViaSocket() noexcept;
-    void DisconnectFromSocket() noexcept;
+    
 
     template<class T>
     void TransferDataToServer(T data) noexcept
     {
+        ConnectViaSocket();
         m_packet.TransferData<T>(m_socket, data);
+        DisconnectFromSocket();
     }
 
 private:
+    bool ConnectViaSocket() noexcept;
+    void DisconnectFromSocket() noexcept;
 
     boost::asio::io_service m_io_service;
     boost::asio::ip::tcp::endpoint m_endpoint;
